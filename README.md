@@ -17,7 +17,7 @@ $ git clone https://github.com/ubadineke/itsa-exe.git
 
 #### Install the pkg package globally
 
-Not using the official pkg package from vecel since it's been deprecated but there's an actively maintained fork [here](https://github.com/yao-pkg/pkg)
+Not using the official pkg package from vercel [this](https://github.com/vercel/pkg) since it's been deprecated but there's an actively maintained fork [here](https://github.com/yao-pkg/pkg)
 
 ```bash
 $ npm install -g @yao-pkg/pkg
