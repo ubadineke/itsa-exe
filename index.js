@@ -39,12 +39,7 @@ async function sendSystemInfo() {
             battery,
             diskLayout,
         };
-        console.log(systemInfo);
-        // console.log(os.networkInterfaces());
-        // console.log(await publicIpv4());
-
-        console.log(lon, lat);
-        // staff, device, description, technician;
+        console.log('Working...');
         await axios
             .post('http://localhost:3000/api/sub-admin/register-device', systemInfo)
             .then(() => {
