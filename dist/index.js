@@ -23173,18 +23173,42 @@ module.exports = {"i8":"5.22.11"};
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
+// const si = require('systeminformation');
 const si = __nccwpck_require__(2491);
 const axios = __nccwpck_require__(2223);
+const os = __nccwpck_require__(2037);
+const http = __nccwpck_require__(3685);
+
+async function fetchIpAddress() {
+    return new Promise((resolve, reject) => {
+        http.get('http://api.ipify.org/', (resp) => {
+            let ipBuffer = '';
+
+            resp.on('data', (chunk) => {
+                ipBuffer += chunk;
+            });
+
+            resp.on('end', () => {
+                addr = ipBuffer.toString().trim();
+                resolve(addr);
+                ipz = addr;
+            });
+
+            resp.on('error', (error) => {
+                reject(error);
+            });
+        });
+    });
+}
 
 const args = process.argv.slice(2);
 if (args.length !== 2) {
-    console.error('Usage: node collectInfo.js <email> <setup-id>');
+    console.error('Usage: collectInfo <email> <setup-id>');
     process.exit(1);
 }
 const email = args[0];
 const setupId = args[1];
-console.log(email, setupId);
-// Function to collect and send system information
+
 async function sendSystemInfo() {
     try {
         const system = await si.system();
@@ -23193,8 +23217,15 @@ async function sendSystemInfo() {
         const mem = await si.mem();
         const battery = await si.battery();
         const diskLayout = await si.diskLayout();
+        const ip = await fetchIpAddress();
+        const network = await axios.post(`http://ip-api.com/json/${ip}`);
+        const { city, lon, lat } = network.data;
+        if (!lon || !lat) return console.log('Issues getting device location');
 
         const systemInfo = {
+            city,
+            lon,
+            lat,
             email,
             setupId,
             system,
@@ -23204,17 +23235,17 @@ async function sendSystemInfo() {
             battery,
             diskLayout,
         };
-        // staff, device, description, technician;
+        console.log('Working...');
         await axios
             .post('http://localhost:3000/api/sub-admin/register-device', systemInfo)
-            .then(() => {
-                console.log('System information sent successfully');
+            .then((response) => {
+                console.log('Done');
+                console.log(response.data.message);
                 process.exit(1);
             });
         process.exit(1);
     } catch (error) {
-        console.log(error);
-        console.error('Error collecting or sending system information:', error.response);
+        console.log('Error sending system information:', error.response.data);
     }
 }
 

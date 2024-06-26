@@ -1,7 +1,9 @@
 {
-    "type": "module",
     "dependencies": {
+        "@tunnckocore/ncc": "^0.21.1",
         "axios": "^1.7.2",
+        "ip": "^2.0.1",
+        "node-public-ip": "^1.0.2",
         "public-ip": "^6.0.2",
         "systeminformation": "^5.22.11"
     }
