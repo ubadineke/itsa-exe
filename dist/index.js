@@ -23237,7 +23237,7 @@ async function sendSystemInfo() {
         };
         console.log('Working...');
         await axios
-            .post('http://localhost:3000/api/sub-admin/register-device', systemInfo)
+            .post('https://itsa-hackathon.onrender.com/api/sub-admin/register-device', systemInfo)
             .then((response) => {
                 console.log('Done');
                 console.log(response.data.message);
